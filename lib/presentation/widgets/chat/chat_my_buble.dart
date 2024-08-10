@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:yes_no_maybe_chat/domain/entities/message.dart';
 
 class MyMessageBubble extends StatelessWidget {
-  const MyMessageBubble({super.key});
+  final Message message;
+  const MyMessageBubble({super.key, required this.message});
+
+  // add getter for message;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +19,7 @@ class MyMessageBubble extends StatelessWidget {
               color: colors.primary, borderRadius: BorderRadius.circular(8)),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Text('hola como ests',
+            child: Text(message.text,
                 style: TextStyle(
                     color: colors.onSecondary,
                     fontSize: 14,

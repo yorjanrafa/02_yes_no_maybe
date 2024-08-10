@@ -2,7 +2,8 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 
 class FieldBox extends StatelessWidget {
-  const FieldBox({super.key});
+  final ValueChanged<String> onValue;
+  const FieldBox({super.key, required this.onValue});
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +27,8 @@ class FieldBox extends StatelessWidget {
           icon: const Icon(FluentIcons.send_16_regular),
           onPressed: () {
             final textValue = textControll.value.text;
-            print('value: $textValue');
             textControll.clear();
+            onValue(textValue);
           }),
     );
     return TextFormField(
@@ -36,9 +37,9 @@ class FieldBox extends StatelessWidget {
       controller: textControll,
       decoration: inputDecoration,
       onFieldSubmitted: (value) {
-        print('summited: $value');
         textControll.clear();
         focusNode.requestFocus();
+        onValue(value);
       },
     );
   }

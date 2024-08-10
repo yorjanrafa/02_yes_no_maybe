@@ -1,5 +1,8 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:yes_no_maybe_chat/domain/entities/message.dart';
+import 'package:yes_no_maybe_chat/presentation/providers/chat_prvider.dart';
 import 'package:yes_no_maybe_chat/presentation/widgets/chat/chat_my_buble.dart';
 import 'package:yes_no_maybe_chat/presentation/widgets/chat/chat_others_bubble.dart';
 import 'package:yes_no_maybe_chat/presentation/widgets/shared/box_field.dart';
@@ -62,6 +65,7 @@ class ChatScreen extends StatelessWidget {
 class _Chatview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final chatProvider = context.watch<ChatProvider>();
     return SafeArea(
       left: false,
       right: false,
@@ -72,15 +76,19 @@ class _Chatview extends StatelessWidget {
           children: [
             Expanded(
                 child: ListView.builder(
-              itemCount: 10,
+              controller: chatProvider.chatScrollController,
+              itemCount: chatProvider.messagesList.length,
               itemBuilder: (context, index) {
-                return (index % 2 == 0)
-                    ? const OthersMessageBubble()
-                    : const MyMessageBubble();
+                final message = chatProvider.messagesList[index];
+                return (message.fromWho == FromWho.me)
+                    ? MyMessageBubble(message: message)
+                    : OthersMessageBubble(message: message);
               },
             )),
             // caja de texto
-            FieldBox(),
+            FieldBox(
+              onValue: chatProvider.sendMessage,
+            ),
           ],
         ),
       ),
